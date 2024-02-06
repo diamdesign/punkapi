@@ -1,5 +1,12 @@
 var randomBeer;
 var pH;
+
+const randomButton = document.querySelector(".randombtn");
+
+randomButton.addEventListener("click", () => {
+	getRandomBeer();
+});
+
 async function getRandomBeer() {
 	try {
 		const response = await fetch("https://api.punkapi.com/v2/beers/random");
