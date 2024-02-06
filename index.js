@@ -22,10 +22,44 @@ function updateBeer() {
 	const randomPh = randomBeer[0].ph;
 	const bgColor = getRandomColor(randomPh);
 	const imageUrl = randomBeer[0].image_url; // Access the first element of the array
-	const html = `<div id="randombeer" style="background:${bgColor};"><img src="${imageUrl}" alt="" /><h1 id="randomname">${randomBeer[0].name}</h1></div>`;
+	const html = `<div id="randombeer" style="background:${bgColor};">
+        <div class="infobtn">i</div>
+        <img src="${imageUrl}" alt="" />
+        <h1 id="randomname">${randomBeer[0].name}</h1>
+    </div>
+    <card id="beerinfo">
+        <div class="close">X</div>
+        <div class="img"><img src="${imageUrl}" alt="" /></div>
+        <div class="info">
+            <h2>${randomBeer[0].name}</h2>
+            <p>${randomBeer[0].description}</p>
+            <ul>
+                <li><span>Alcohol by volume (ABV)</span><span>${randomBeer[0].abv}</span></li>
+                <li><span>Volume</span><span>${randomBeer[0].volume.value} ${randomBeer[0].volume.unit}</span></li>
+                <li><span>PH</span><span>${randomPh}</span></li>
+                </ul>
+            <h3>Ingredients</h3>
+            <h3>Food Pairing</h3>
+            <p><span class="tip">Tip</span>${randomBeer[0].brewers_tips}</p>
+        </div>
+        
+    </card>`;
 	const insertinto = document.querySelector("#randombeerinput");
 	insertinto.innerHTML = "";
 	insertinto.insertAdjacentHTML("afterbegin", html);
+
+	const infoBtn = document.querySelector(".infobtn");
+	const infoHTML = document.getElementById("beerinfo");
+	const closeBtn = document.querySelector(".close");
+	closeBtn.addEventListener("click", () => {
+		infoHTML.style.display = "none";
+		infoBtn.style.display = "block";
+	});
+
+	infoBtn.addEventListener("click", () => {
+		infoBtn.style.display = "none";
+		infoHTML.style.display = "grid";
+	});
 }
 
 function getRandomColor(pH) {
