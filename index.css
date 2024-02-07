@@ -192,6 +192,12 @@ h1 {
 	margin-bottom: 10px;
 }
 
+#beerinfo p,
+#beerinfo ul li {
+	font-size: 14px;
+	line-height: 18px;
+}
+
 #beerinfo ul {
 	margin-top: 20px;
 	margin-bottom: 20px;

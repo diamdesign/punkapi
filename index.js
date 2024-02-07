@@ -39,7 +39,9 @@ function updateBeer() {
                 <li><span>PH</span><span>${randomPh}</span></li>
                 </ul>
             <h3>Ingredients</h3>
+			<div id="ingredients-container"></div>
             <h3>Food Pairing</h3>
+			<div id="foodpairing-container"></div>
             <p><span class="tip">Tip</span>${randomBeer[0].brewers_tips}</p>
         </div>
         
@@ -47,6 +49,11 @@ function updateBeer() {
 	const insertinto = document.querySelector("#randombeerinput");
 	insertinto.innerHTML = "";
 	insertinto.insertAdjacentHTML("afterbegin", html);
+
+	const ingredientsContainer = document.getElementById("ingredients-container");
+	const foodpairingContainer = document.getElementById("foodpairing-container");
+	ingredientsContainer.innerHTML = displayIngredients(randomBeer[0].ingredients);
+	foodpairingContainer.innerHTML = displayIngredients(randomBeer[0].food_pairing);
 
 	const infoBtn = document.querySelector(".infobtn");
 	const infoHTML = document.getElementById("beerinfo");
@@ -60,6 +67,28 @@ function updateBeer() {
 		infoBtn.style.display = "none";
 		infoHTML.style.display = "grid";
 	});
+}
+
+getRandomBeer();
+
+// AI Generated
+function displayIngredients(ingredients) {
+	let html = "<ul>";
+	for (const category in ingredients) {
+		if (Array.isArray(ingredients[category])) {
+			html += `<li><span>${category}</span>`;
+			const items = ingredients[category];
+			const itemList = items
+				.map((item) => `${item.name} (${item.amount.value} ${item.amount.unit})`)
+				.join(", ");
+			html += itemList;
+			html += "</li>";
+		} else {
+			html += `<li><span>${category}</span> ${ingredients[category]}</li>`;
+		}
+	}
+	html += "</ul>";
+	return html;
 }
 
 function getRandomColor(pH) {
@@ -94,5 +123,3 @@ function getRandomColor(pH) {
 	);
 	return "#" + rgb.join("");
 }
-
-getRandomBeer();
