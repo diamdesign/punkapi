@@ -1,21 +1,89 @@
 var randomBeer;
+var searchResult;
 var pH;
 
 const randomButton = document.querySelector(".randombtn");
+const searchButton = document.querySelector(".searchbtn");
+
+const searchContainer = document.querySelector("#search-container");
+const searchClose = document.querySelector("#close-search");
+const searchResultHTML = document.querySelector("#searchresult");
+
+const searchInput = document.querySelector("#search-input");
+
+searchButton.addEventListener("click", () => {
+	searchContainer.style.display = "flex";
+	searchInput.focus();
+});
+
+searchClose.addEventListener("click", () => {
+	searchContainer.style.display = "none";
+});
 
 randomButton.addEventListener("click", () => {
 	getRandomBeer();
 });
 
-async function getRandomBeer() {
-	try {
-		const response = await fetch("https://api.punkapi.com/v2/beers/random");
-		randomBeer = await response.json();
-		console.log(randomBeer);
-		updateBeer();
-	} catch (error) {
-		console.error("Error fetching random beer:", error);
+document.addEventListener("submit", (event) => {
+	event.preventDefault();
+	let searchTxt = searchInput.value;
+	searchBeer(searchTxt);
+	searchInput.value = "";
+});
+
+async function getRandomBeer(id) {
+	if (id) {
+		try {
+			const response = await fetch("https://api.punkapi.com/v2/beers/" + id);
+			randomBeer = await response.json();
+			console.log(randomBeer);
+			updateBeer();
+		} catch (error) {
+			console.error("Error fetching beer:", error);
+		}
+	} else {
+		try {
+			const response = await fetch("https://api.punkapi.com/v2/beers/random");
+			randomBeer = await response.json();
+			console.log(randomBeer);
+			updateBeer();
+		} catch (error) {
+			console.error("Error fetching random beer:", error);
+		}
 	}
+}
+
+async function searchBeer(searchTxt) {
+	try {
+		let search = searchTxt.replace(/\s/g, "_");
+		const response = await fetch("https://api.punkapi.com/v2/beers?beer_name=" + search);
+		searchResult = await response.json();
+		console.log(searchResult);
+		updateResult();
+	} catch (error) {
+		console.error("Error fetching search result:", error);
+	}
+}
+
+function updateResult() {
+	searchResultHTML.innerHTML = "";
+	for (let i = 0; i < searchResult.length; i++) {
+		const beerName = searchResult[i].name;
+		const beerId = searchResult[i].id;
+		const html = `<div class="result" data-id="${beerId}">${beerName}</div>`;
+		searchResultHTML.insertAdjacentHTML("afterbegin", html);
+	}
+
+	const allResults = document.querySelectorAll(".result");
+	allResults.forEach((result) => {
+		result.addEventListener("click", (e) => {
+			e.preventDefault();
+			let target = e.target;
+			let id = target.dataset.id;
+			getRandomBeer(id);
+			searchContainer.style.display = "none";
+		});
+	});
 }
 
 function updateBeer() {
@@ -28,7 +96,7 @@ function updateBeer() {
         <h1 id="randomname">${randomBeer[0].name}</h1>
     </div>
     <card id="beerinfo">
-        <div class="close">X</div>
+        <div class="close" id="close-beer">X</div>
         <div class="img"><img src="${imageUrl}" alt="" /></div>
         <div class="info">
             <h2>${randomBeer[0].name}</h2>
@@ -57,7 +125,7 @@ function updateBeer() {
 
 	const infoBtn = document.querySelector(".infobtn");
 	const infoHTML = document.getElementById("beerinfo");
-	const closeBtn = document.querySelector(".close");
+	const closeBtn = document.querySelector("#close-beer");
 	closeBtn.addEventListener("click", () => {
 		infoHTML.style.display = "none";
 		infoBtn.style.display = "block";
@@ -123,3 +191,20 @@ function getRandomColor(pH) {
 	);
 	return "#" + rgb.join("");
 }
+
+function createBubble() {
+	const bubble = document.createElement("div");
+	bubble.classList.add("beer-bubble");
+	bubble.style.left = `${Math.random() * window.innerWidth}px`;
+	document.body.appendChild(bubble);
+
+	bubble.addEventListener("animationend", () => {
+		bubble.remove();
+	});
+
+	setTimeout(() => {
+		bubble.remove();
+	}, 8000); // Remove the bubble after 5 seconds (adjust as needed)
+}
+
+setInterval(createBubble, 250); // Adjust the interval as needed for the frequency of bubbles

@@ -89,6 +89,11 @@ h1 {
 	max-height: 80vh;
 	min-height: 80vh;
 	margin-bottom: 40px;
+	z-index: 7;
+}
+
+#randomname {
+	z-index: 8;
 }
 
 .randombtn {
@@ -101,9 +106,14 @@ h1 {
 	height: 120px;
 	background-color: darkgreen;
 	border-radius: 100%;
-	z-index: 10;
+	z-index: 60;
 	right: 40px;
 	bottom: 40px;
+}
+
+.info {
+	max-height: 75vh;
+	overflow-y: auto;
 }
 
 .infobtn {
@@ -113,7 +123,7 @@ h1 {
 	height: 80px;
 	background-color: rgb(48, 48, 48);
 	border-radius: 100%;
-	z-index: 10;
+	z-index: 20;
 	left: 60%;
 	top: 80px;
 	text-align: center;
@@ -126,11 +136,38 @@ h1 {
 	animation-delay: 0.1s;
 }
 
+.searchbtn {
+	opacity: 0;
+	position: fixed;
+	width: 80px;
+	height: 80px;
+	background-color: rgba(255, 255, 255, 0.5);
+	border-radius: 100%;
+	z-index: 20;
+	right: 40px;
+	top: 40px;
+	text-align: center;
+	background-image: url("search.svg");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 50%;
+	filter: invert(1);
+	color: white;
+	animation: imgintro 0.5s 1 forwards;
+	animation-delay: 0.1s;
+}
+
+.searchbtn:hover {
+	cursor: pointer;
+	scale: 1.2 !important;
+	background-color: rgba(255, 255, 255, 1);
+}
+
 .randombtn:hover,
 .infobtn:hover,
 .close:hover {
 	cursor: pointer;
-	scale: 1.1;
+	scale: 1.2;
 	background-color: lime;
 }
 
@@ -141,12 +178,19 @@ h1 {
 }
 .randombtn:active,
 .infobtn:active,
-.close:active {
+.close:active,
+.searchbtn:active {
 	cursor: pointer;
 	scale: 1 !important;
 }
 
+#search-container .close {
+	top: 40px;
+	right: 40px;
+}
+
 #beerinfo {
+	max-height: 80vh;
 	max-width: 700px;
 	display: none;
 	grid-template-columns: 1fr 4fr;
@@ -155,7 +199,7 @@ h1 {
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
 	padding: 40px;
-	z-index: 5;
+	z-index: 30;
 	background: white;
 	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
 	border-radius: 18px;
@@ -250,4 +294,111 @@ h1 {
 	right: -21px;
 	text-align: center;
 	line-height: 42px;
+}
+
+.beer-bubble {
+	position: absolute;
+	width: 21px;
+	height: 21px;
+	background-color: #f1f98175; /* Beer color */
+	box-shadow: 0 0 4px white inset;
+	border-radius: 50%;
+	animation: bubble-rise 8s linear infinite;
+	z-index: 0;
+	mix-blend-mode: soft-light;
+}
+
+@keyframes bubble-rise {
+	0% {
+		transform: translateX(0);
+		bottom: -10px;
+		opacity: 1;
+	}
+	20% {
+		transform: translateX(-20px);
+	}
+	60% {
+		transform: translateX(20px);
+	}
+	100% {
+		transform: translateX(0);
+		bottom: 100%;
+		opacity: 0;
+	}
+}
+
+#search-container {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	backdrop-filter: blur(12px);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(209, 209, 81, 0.388);
+	z-index: 100;
+	flex-direction: column;
+}
+
+#search-container input {
+	padding: 20px;
+	border-radius: 8px;
+	outline: none;
+	border: none;
+	font-size: 28px;
+	padding-right: 75px;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+#search-container .form-group {
+	position: relative;
+}
+#search-container button {
+	background-color: transparent;
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	width: 62px;
+	height: 62px;
+	border-radius: 100%;
+	border: none;
+	outline: none;
+	background-image: url("search.svg");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: 50%;
+}
+#search-container button:hover {
+	cursor: pointer;
+	scale: 1.3;
+}
+
+#search-container button:active {
+	cursor: pointer;
+	scale: 1.1;
+}
+
+#searchresult {
+	margin-top: 40px;
+	max-height: 80vh;
+	overflow-y: auto;
+	width: 80%;
+	padding-right: 10px;
+}
+
+.result {
+	padding: 20px;
+	background: rgba(255, 255, 255, 0.4);
+	margin-bottom: 2px;
+	border-radius: 8px;
+	color: black;
+	font-weight: bold;
+}
+
+.result:hover {
+	cursor: pointer;
+	background: white;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
